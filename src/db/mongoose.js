@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 mongoose.connect('mongodb://127.0.0.1:27017/photo-uploader', {
     useNewUrlParser: true,
-    userCreateIndex: true,
+    useCreateIndex: true,
     useFindAndModify: false
 })
 
