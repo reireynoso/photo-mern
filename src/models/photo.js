@@ -18,6 +18,11 @@ const photoSchema = new mongoose.Schema({
     },
     image: {
         type: Buffer
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     }
 })
 
