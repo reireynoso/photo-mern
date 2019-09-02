@@ -13,4 +13,17 @@ router.post('/photo', async(req,res) => {
     }
 })
 
+router.get('/photos', async(req,res) => {
+    try{
+        const photos = await Photo.find({})
+        await photos[2].populate({
+            path: 'owner'
+        }).execPopulate()
+        res.send(photos[2])
+    }
+    catch(e){
+        res.status(500).send()
+    }
+})
+
 module.exports = router
