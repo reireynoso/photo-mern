@@ -16,7 +16,9 @@ router.post('/user', async(req,res) => {
 router.get('/user/:id', async(req,res) => {
     try{
         const user = await User.findById(req.params.id)
-        res.send(user)
+        await user.populate('photos').execPopulate() //field doesn't show on json response. virtually it does
+        // console.log(user.photos)
+        res.send(user.photos)
     }
     catch(e){
         res.status(404).send()

@@ -23,7 +23,11 @@ const userSchema = mongoose.Schema({
                 throw new Error('Age must be a positive number')
             }
         }
-    }
+    },
+    // photos: [{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Photo'
+    // }]
     // tokens: [{
     //     token: String,
     //     required: true
@@ -33,7 +37,7 @@ const userSchema = mongoose.Schema({
 })
 
 userSchema.virtual('photos', {
-    ref: 'photo',
+    ref: 'Photo',
     localField: '_id',
     foreignField: 'owner'
 })
