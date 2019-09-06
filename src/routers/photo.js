@@ -2,6 +2,15 @@ const express = require('express')
 const router = new express.Router()
 const Photo = require('../models/photo')
 
+router.get('/photos', async(req,res) => {
+    const photo = await Photo.find({})
+    try{
+        res.status(200).send(photo)
+    }
+    catch(e){
+        res.status(404).send()
+    }
+})
 router.post('/photo', async(req,res) => {
     const photo = new Photo(req.body)
     try {
@@ -13,17 +22,19 @@ router.post('/photo', async(req,res) => {
     }
 })
 
-router.get('/photos', async(req,res) => {
-    try{
-        const photos = await Photo.find({owner: "5d6d637ab0cb59bb5d502693"})
-        // await photos[0].populate({
-        //     path: 'owner'
-        // }).execPopulate()
-        res.send(photos)
-    }
-    catch(e){
-        res.status(500).send()
-    }
-})
+
+
+// router.get('/photos', async(req,res) => {
+//     try{
+//         const photos = await Photo.find({owner: "5d6d637ab0cb59bb5d502693"})
+//         // await photos[0].populate({
+//         //     path: 'owner'
+//         // }).execPopulate()
+//         res.send(photos)
+//     }
+//     catch(e){
+//         res.status(500).send()
+//     }
+// })
 
 module.exports = router
