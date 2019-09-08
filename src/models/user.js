@@ -37,6 +37,23 @@ const userSchema = mongoose.Schema({
     timestamps: true
 })
 
+//method to be called on from router
+userSchema.statics.findByCredentials = async(email,password) => {
+    const user = await User.findOne({ email: email })
+
+    if(!user){
+        throw new Error('Unable to login')
+    }
+    //if user is found, compares password
+    const isMatch = await bcrypt.compare(password, user.password)
+    if(!isMatch){
+        throw new Error('Unable to login')
+    }
+
+    return user
+}
+
+//hashes plain text pw before saving
 userSchema.pre('save', async function(next){
     const user = this
 
