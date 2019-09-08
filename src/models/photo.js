@@ -25,8 +25,9 @@ const photoSchema = new mongoose.Schema({
         ref: 'User'
     },
     genre: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Genre'
     }
 })
 

@@ -1,6 +1,7 @@
 const express = require("express")
 const router = new express.Router()
 const User = require("../models/user")
+const Photo = require("../models/photo")
 
 router.post('/users', async(req,res) => {
     const user = new User(req.body)
@@ -16,9 +17,20 @@ router.post('/users', async(req,res) => {
 router.get('/user/:id', async(req,res) => {
     try{
         const user = await User.findById(req.params.id)
-        await user.populate('photos').execPopulate() //field doesn't show on json response. virtually it does
+        // await user.populate('photos').execPopulate() //field doesn't show on json response. virtually it does
         // console.log(user.photos)
-        res.send(user.photos)
+        res.send(user)
+    }
+    catch(e){
+        res.status(404).send()
+    }
+})
+
+router.get('/user/:id/photos', async(req,res) => {
+    try{
+        const user = await User.findById(req.params.id)
+        const userPhotos = await Photo.find({owner: user.id})
+        res.send(userPhotos)
     }
     catch(e){
         res.status(404).send()

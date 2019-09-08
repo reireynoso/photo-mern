@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const validator = require('validator')
 const Photo = require('./photo')
+const bcrypt = require('bcryptjs')
 
 const userSchema = mongoose.Schema({
     name: {
@@ -15,6 +16,10 @@ const userSchema = mongoose.Schema({
         trim: true,
         lowercase: true
     },
+    password: {
+        type: String,
+        trim: true
+    },
     age: {
         type: Number,
         default: 0,
@@ -23,11 +28,7 @@ const userSchema = mongoose.Schema({
                 throw new Error('Age must be a positive number')
             }
         }
-    },
-    // photos: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Photo'
-    // }]
+    }
     // tokens: [{
     //     token: String,
     //     required: true
@@ -36,11 +37,21 @@ const userSchema = mongoose.Schema({
     timestamps: true
 })
 
-userSchema.virtual('photos', {
-    ref: 'Photo',
-    localField: '_id',
-    foreignField: 'owner'
+userSchema.pre('save', async function(next){
+    const user = this
+
+    //check if password has been updated
+    if(user.isModified('password')){
+        user.password = await bcrypt.hash(user.password, 8)
+    }
+
+    next()
 })
+// userSchema.virtual('photos', {
+//     ref: 'Photo',
+//     localField: '_id',
+//     foreignField: 'owner'
+// })
 
 const User = mongoose.model('User', userSchema)
 
