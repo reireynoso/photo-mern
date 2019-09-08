@@ -1,26 +1,55 @@
 const express = require('express')
 const router = new express.Router()
 const Photo = require('../models/photo')
+const multer = require('multer')
+const sharp = require('sharp')
 
 router.get('/photos', async(req,res) => {
     const photo = await Photo.find({})
     try{
+        // res.set('Content-Type', 'image/jpg')
         res.status(200).send(photo)
     }
     catch(e){
         res.status(404).send()
     }
 })
-router.post('/photo', async(req,res) => {
-    const photo = new Photo(req.body)
+
+router.get('/photos/:id', async(req,res) => {
+    const photo = await Photo.findById(req.params.id)
+    try{
+        //returns image as jpg. 
+        res.set('Content-Type', 'image/jpg')
+        res.status(200).send(photo.image)
+    }
+    catch(e){
+        res.status(404).send()
+    }
+})
+
+const upload = multer({
+    // dest: 'images'
+    limits: {
+        fileSize: 2000000
+    }
+})
+
+router.post('/photo', upload.single('image'), async(req,res) => {
+    // console.log(req.file)
+    const buffer = await sharp(req.file.buffer).toBuffer()
+    const newPhotoObj = {...req.body, image: buffer}
+    const photo = new Photo(newPhotoObj)
     try {
         await photo.save()
+        res.set('Content-Type', 'image/png')
         res.status(201).send(photo)
     }
     catch(e){
         res.status(400).send(e)
     }
 })
+
+
 
 
 

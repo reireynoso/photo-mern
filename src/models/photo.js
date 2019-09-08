@@ -17,7 +17,8 @@ const photoSchema = new mongoose.Schema({
         default: 0
     },
     image: {
-        type: Buffer
+        type: Buffer,
+        required: true
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
