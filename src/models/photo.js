@@ -17,7 +17,7 @@ const photoSchema = new mongoose.Schema({
         default: 0
     },
     image: {
-        type: Buffer,
+        type: String,
         required: true
     },
     owner: {

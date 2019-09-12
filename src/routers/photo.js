@@ -3,6 +3,13 @@ const router = new express.Router()
 const Photo = require('../models/photo')
 const multer = require('multer')
 const sharp = require('sharp')
+const cloudinary = require('cloudinary')
+
+cloudinary.config({
+    cloud_name: 'dbajnnylp',
+    api_key: '383671612569842',
+    api_secret: 'vtYO04aHVQac4TGFsJ9AeJmgKBY'
+})
 
 router.get('/photos', async(req,res) => {
     const photo = await Photo.find({})
@@ -29,19 +36,30 @@ router.get('/photos/:id', async(req,res) => {
 
 const upload = multer({
     // dest: 'images'
+    storage: multer.diskStorage({}),
     limits: {
         fileSize: 2000000
+    },
+    fileFilter(req,file,cb){
+        if(!file.originalname.match(/\.(jpg|jpeg|png)$/)){
+            return cb(new Error('Please upload Jpg Jpeg or Png file'))
+        }
+        cb(undefined, true)
     }
 })
 
+
 router.post('/photo', upload.single('image'), async(req,res) => {
     // console.log(req.file)
-    const buffer = await sharp(req.file.buffer).toBuffer()
-    const newPhotoObj = {...req.body, image: buffer}
+    // const buffer = await sharp(req.file.buffer).toBuffer()
+    const image = await cloudinary.v2.uploader.upload(req.file.path)
+    const newPhotoObj = {...req.body, image: image.url}
     const photo = new Photo(newPhotoObj)
+    // console.log(image.url)
+    // console.log(newPhotoObj)
     try {
         await photo.save()
-        res.set('Content-Type', 'image/png')
+        // res.set('Content-Type', 'image/png')
         res.status(201).send(photo)
     }
     catch(e){
