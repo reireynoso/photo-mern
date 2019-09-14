@@ -22,7 +22,7 @@ router.get('/photos', async(req,res) => {
     }
 })
 
-router.get('/photos/:id', async(req,res) => {
+router.get('/photo/:id', async(req,res) => {
     const photo = await Photo.findById(req.params.id)
     try{
         //returns image as jpg. 
@@ -49,7 +49,7 @@ const upload = multer({
 })
 
 
-router.post('/photo', upload.single('image'), async(req,res) => {
+router.post('/photos', upload.single('image'), async(req,res) => {
     // console.log(req.file)
     // const buffer = await sharp(req.file.buffer).toBuffer()
     const image = await cloudinary.v2.uploader.upload(req.file.path)
@@ -67,9 +67,38 @@ router.post('/photo', upload.single('image'), async(req,res) => {
     }
 })
 
+router.patch('/photo/:id', async(req,res) => {
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['name', 'description']
+    const isValidOperation = updates.every((update) => {
+        return allowedUpdates.includes(update)
+    })
+    if(isValidOperation){
+        return res.status(400).send({error: 'Invalid updates!'})
+    }
+    try{
+        const photo = await Photo.findById(req.params.id)
+        updates.forEach((update) => {
+            user[update] = req.body[update]
+        })
+        await user.save()
+    }
+    catch(e){
+        req.status(400).send(e)
+    }
+})
 
-
-
+router.delete('/photo/:id', async(req,res) => {
+    try{
+        const photo = Photo.findByIdAndDelete(req.params.id)
+        if(!photo){
+            res.status(404).send()
+        }
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+})
 
 // router.get('/photos', async(req,res) => {
 //     try{
