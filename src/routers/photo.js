@@ -1,6 +1,8 @@
 const express = require('express')
 const router = new express.Router()
 const Photo = require('../models/photo')
+const User = require('../models/user')
+const Genre = require('../models/genre')
 const multer = require('multer')
 const sharp = require('sharp')
 const cloudinary = require('cloudinary')
@@ -10,6 +12,17 @@ cloudinary.config({
     api_key: '383671612569842',
     api_secret: 'vtYO04aHVQac4TGFsJ9AeJmgKBY'
 })
+
+// alternative seed data approach
+// router.get('/seedData', async(req,res) => {
+//     const newUser = await User.create({
+//         name: 'hello',
+//         email: 'hello@sample.com',
+//         password: 'hello',
+//         age: 12
+//     })
+//     res.send(newUser)
+// })
 
 router.get('/photos', async(req,res) => {
     const photo = await Photo.find({})
