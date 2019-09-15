@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 const validator = require('validator')
 const Photo = require('./photo')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const userSchema = mongoose.Schema({
     name: {
@@ -28,6 +29,10 @@ const userSchema = mongoose.Schema({
                 throw new Error('Age must be a positive number')
             }
         }
+    },
+    token: {
+        type: String,
+        // required: true
     }
     // tokens: [{
     //     token: String,
@@ -36,6 +41,19 @@ const userSchema = mongoose.Schema({
 }, {
     timestamps: true
 })
+
+//set instance methods for user class, dealing with tokens
+
+userSchema.methods.generateAuthToken = async function (){
+    const user = this
+    // console.log(user, 'this is auth user')
+    const token = jwt.sign({ _id: user._id.toString()}, 'thisismyphoto')
+    user.token = token 
+    // console.log(user, 'token?')
+    await user.save()
+
+    return token
+}
 
 //method to be called on from router
 userSchema.statics.findByCredentials = async(email,password) => {

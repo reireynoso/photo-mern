@@ -5,9 +5,13 @@ const Photo = require("../models/photo")
 
 router.post('/users', async(req,res) => {
     const user = new User(req.body)
+    // console.log(user)
     try{
+        //create token
         await user.save()
-        res.status(201).send(user)
+        const token = await user.generateAuthToken()
+        // console.log(token)
+        res.status(201).send({user, token})
     }
     catch(e){
         res.status(400).send(e)
