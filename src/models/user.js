@@ -42,12 +42,26 @@ const userSchema = mongoose.Schema({
     timestamps: true
 })
 
+//private methods
+
+userSchema.methods.toJSON = function(){
+    const user = this
+    const userObject = user.toObject()
+
+    delete userObject.password
+    // delete userObject.token
+
+    return userObject
+}
+
 //set instance methods for user class, dealing with tokens
 
 userSchema.methods.generateAuthToken = async function (){
     const user = this
     // console.log(user, 'this is auth user')
     const token = jwt.sign({ _id: user._id.toString()}, 'thisismyphoto')
+    console.log(user._id, 'user_id')
+    console.log(token, 'token id')
     user.token = token 
     // console.log(user, 'token?')
     await user.save()
@@ -67,7 +81,7 @@ userSchema.statics.findByCredentials = async(email,password) => {
     if(!isMatch){
         throw new Error('Unable to login')
     }
-
+console.log(user)
     return user
 }
 

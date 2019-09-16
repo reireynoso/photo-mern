@@ -2,6 +2,7 @@ const express = require("express")
 const router = new express.Router()
 const User = require("../models/user")
 const Photo = require("../models/photo")
+const auth = require('../middleware/auth')
 
 router.post('/users', async(req,res) => {
     const user = new User(req.body)
@@ -21,7 +22,8 @@ router.post('/users', async(req,res) => {
 router.post('/users/login', async(req,res) => {
     try{
         const user = await User.findByCredentials(req.body.email, req.body.password)
-        res.send(user)
+        const token = await user.generateAuthToken()
+        res.send({user, token})
     }catch(e){
         res.status(400).send(e)
     }
@@ -40,10 +42,10 @@ router.get('/user/:id', async(req,res) => {
     }
 })
 
-router.get('/user/:id/photos', async(req,res) => {
+router.get('/user/:id/photos', auth ,async(req,res) => {
     try{
-        const user = await User.findById(req.params.id)
-        const userPhotos = await Photo.find({owner: user.id})
+        // const user = await User.findById(req.params.id)
+        const userPhotos = await Photo.find({owner: req.user.id})
         res.send(userPhotos)
     }
     catch(e){
