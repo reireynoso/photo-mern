@@ -32,12 +32,8 @@ const userSchema = mongoose.Schema({
     },
     token: {
         type: String,
-        // required: true
+       
     }
-    // tokens: [{
-    //     token: String,
-    //     required: true
-    // }]
 }, {
     timestamps: true
 })
@@ -58,12 +54,8 @@ userSchema.methods.toJSON = function(){
 
 userSchema.methods.generateAuthToken = async function (){
     const user = this
-    // console.log(user, 'this is auth user')
-    const token = jwt.sign({ _id: user._id.toString()}, 'thisismyphoto')
-    console.log(user._id, 'user_id')
-    console.log(token, 'token id')
-    user.token = token 
-    // console.log(user, 'token?')
+    const token = jwt.sign({ id: user.id.toString()}, 'thisismyphoto')
+    // console.log(user.id)
     await user.save()
 
     return token
@@ -81,7 +73,7 @@ userSchema.statics.findByCredentials = async(email,password) => {
     if(!isMatch){
         throw new Error('Unable to login')
     }
-console.log(user)
+// console.log(user)
     return user
 }
 
