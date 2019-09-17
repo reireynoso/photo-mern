@@ -55,7 +55,7 @@ userSchema.methods.toJSON = function(){
 userSchema.methods.generateAuthToken = async function (){
     const user = this
     const token = jwt.sign({ _id: user._id.toString()}, 'thisismyphoto')
-    console.log(user._id, 'user_id')
+    // console.log(user._id, 'user_id')
     await user.save()
 
     return token
