@@ -7,6 +7,7 @@ const multer = require('multer')
 const sharp = require('sharp')
 const cloudinary = require('cloudinary')
 const auth = require('../middleware/auth')
+const Comment = require('../models/comment')
 
 cloudinary.config({
     cloud_name: 'dbajnnylp',
@@ -38,13 +39,27 @@ router.get('/photos', async(req,res) => {
 
 router.get('/photo/:id', async(req,res) => {
     const photo = await Photo.findById(req.params.id)
+    const comments = await Comment.find({ photo_id: req.params.id})
+    // console.log(photo)
+    // const photoInfo = {...photo, comments}
     try{
         //returns image as jpg. 
         // res.set('Content-Type', 'image/jpg')
-        res.status(200).send(photo.image)
+        res.status(200).send({photo, comments})
     }
     catch(e){
         res.status(404).send()
+    }
+})
+
+router.post('/photo/:id/comments', auth ,async(req,res) => {
+    const newComment = {...req.body, user_id: req.user._id}
+    const comment = new Comment(newComment)
+    try{
+        await comment.save()
+        res.status(201).send(comment)
+    }catch(e){
+        res.status(400).send(e)
     }
 })
 

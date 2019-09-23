@@ -3,6 +3,7 @@ const router = new express.Router()
 const User = require("../models/user")
 const Photo = require("../models/photo")
 const auth = require('../middleware/auth')
+const cors = require('cors')
 
 router.post('/users', async(req,res) => {
     const user = new User(req.body)
@@ -14,16 +15,18 @@ router.post('/users', async(req,res) => {
         res.status(201).send({user, token})
     }
     catch(e){
-        res.status(400).send(e)
+        // console.log(e.errmsg)
+        res.status(400).send({error: 'Email already exists.'})
     }
 })
-router.post('/users/login', async(req,res) => {
+router.post('/users/login', cors() , async(req,res) => {
     try{
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
         res.send({user, token})
     }catch(e){
-        res.status(400).send(e)
+        // console.log(Object.keys(e))
+        res.status(400).send({error: "Unable to Login"})
     }
 })
 
@@ -38,6 +41,16 @@ router.post('/users/login', async(req,res) => {
 //         res.status(404).send()
 //     }
 // })
+
+router.get('/user/auto_login', auth, async(req,res) => {
+    try{
+        // const user = await User.findById(req.params.id)
+        res.send(req.user)
+    }
+    catch(e){
+        res.status(404).send()
+    }
+})
 
 router.get('/user/photos', auth ,async(req,res) => {
     try{

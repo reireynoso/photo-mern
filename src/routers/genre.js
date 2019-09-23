@@ -11,14 +11,14 @@ router.get('/genres', async(req,res) => {
     }
 })
 
-router.post('/genres', async(req,res) => {
-    const genre = new Genre(req.body)
-    try{
-        await genre.save()
-        res.status(201).send(genre)
-    }catch(e){
-        res.status(400).send(e)
-    }
-})
+// router.post('/genres', async(req,res) => {
+//     const genre = new Genre(req.body)
+//     try{
+//         await genre.save()
+//         res.status(201).send(genre)
+//     }catch(e){
+//         res.status(400).send(e)
+//     }
+// })
 
 module.exports = router
