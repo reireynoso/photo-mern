@@ -77,10 +77,13 @@ const upload = multer({
     }
 })
 
-router.post('/photos', upload.single('image'), auth, async(req,res) => {
-    // console.log(req.file)
+router.post('/photos', upload.single('image'), auth ,async(req,res) => {
+    // console.log(req.file.path, "photo")
     // const buffer = await sharp(req.file.buffer).toBuffer()
     const image = await cloudinary.v2.uploader.upload(req.file.path)
+    // console.log(req.body.image)
+    // const image = await cloudinary.v2.uploader.upload(req.body.image)
+    
     const newPhotoObj = {...req.body, owner: req.user._id, image: image.url}
     const photo = new Photo(newPhotoObj)
 
