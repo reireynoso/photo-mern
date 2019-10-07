@@ -50,6 +50,12 @@ userSchema.methods.toJSON = function(){
     return userObject
 }
 
+// userSchema.virtual('photos', {
+//     ref: 'Photo',
+//     localField: '_id',
+//     foreignField: 'owner'
+// })
+
 //set instance methods for user class, dealing with tokens
 
 userSchema.methods.generateAuthToken = async function (){

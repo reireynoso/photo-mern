@@ -27,10 +27,12 @@ cloudinary.config({
 // })
 
 router.get('/photos', async(req,res) => {
-    const photo = await Photo.find({})
+    //populate fields of owner and genre models instead of just having the id string
+    // const photos = await Photo.find({}).populate('owner', 'name age').populate('genre','name').exec()
+    const photos = await Photo.find({})
     try{
-        // res.set('Content-Type', 'image/jpg')
-        res.status(200).send(photo)
+        // console.log(photos)
+        res.status(200).send(photos)
     }
     catch(e){
         res.status(404).send()
