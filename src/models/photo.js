@@ -39,11 +39,19 @@ const photoSchema = new mongoose.Schema({
 //     foreignField: '_id'
 // })
 
+
 //allows populate method to be accessible every time find is used for photos
 photoSchema.pre('find', function(){
     this.populate('owner', 'name age')
     this.populate('genre', 'name')
 })
+//populate field upon creation and save
+photoSchema.post('save', async function(doc,next){
+    await doc.populate('owner').execPopulate()
+    await doc.populate('genre').execPopulate()
+    next()
+})
+
 
 const Photo = mongoose.model('Photo', photoSchema)
 
