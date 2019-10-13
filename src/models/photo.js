@@ -42,6 +42,7 @@ const photoSchema = new mongoose.Schema({
 //allows populate method to be accessible every time find is used for photos
 photoSchema.pre('find', function(){
     this.populate('owner', 'name age')
+    this.populate('genre', 'name')
 })
 
 const Photo = mongoose.model('Photo', photoSchema)

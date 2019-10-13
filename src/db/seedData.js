@@ -4,8 +4,8 @@ const Genre = require('../models/genre')
 
 const data = async() => {
 
-    User.collection.deleteMany({})
-    Genre.collection.deleteMany({})
+    // User.collection.deleteMany({})
+    // Genre.collection.deleteMany({})
     
     const rei = await User.create({
         name: 'Rei',
