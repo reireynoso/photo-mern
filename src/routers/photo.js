@@ -98,6 +98,19 @@ router.post('/photos', upload.single('image'), auth ,async(req,res) => {
     }
 })
 
+router.patch('/photo/:id/likes', auth, async(req,res) => {
+    try{
+        const photo = await Photo.findById(req.params.id)
+        photo.likes = req.body.likes
+        // console.log(req.body.likes)
+        await photo.save()
+        res.send(photo)
+    }
+    catch(e){
+        req.status(400).send(e)
+    }
+})
+
 router.patch('/photo/:id', auth, async(req,res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'description']
@@ -109,13 +122,13 @@ router.patch('/photo/:id', auth, async(req,res) => {
     }
     try{
         const photo = await Photo.findById(req.params.id)
-        if(photo.owner !== req.user._id){
+        if(photo.owner._id !== req.user._id){
             throw new Error("You do not own this photo.")
         }
         updates.forEach((update) => {
-            user[update] = req.body[update]
+            photo[update] = req.body[update]
         })
-        await user.save()
+        await photo.save()
         res.send()
     }
     catch(e){
