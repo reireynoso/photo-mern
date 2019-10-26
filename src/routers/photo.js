@@ -136,7 +136,7 @@ router.patch('/photo/:id', auth, async(req,res) => {
     }
 })
 
-router.delete('/photo/:id', auth, async(req,res) => {
+router.delete('/photo/:id', auth ,async(req,res) => {
     const photo = await Photo.findById(req.params.id)
     try{
         // const photo = Photo.findByIdAndDelete(req.params.id)
@@ -146,7 +146,22 @@ router.delete('/photo/:id', auth, async(req,res) => {
         if(photo.owner !== req.user._id){
             throw new Error("You do not own this photo.")
         }
-        await photo.remove()
+        // console.log(photo)
+        if(photo.image.includes("cloudinary")){
+            const public_id = photo.image.split("/").slice(-1)[0].split(".")[0]
+            // console.log(public_id)
+            //grabs public id which is the id w/o the file extension
+            cloudinary.v2.uploader.destroy(public_id, async function(error,result) {
+                // console.log(result, error) 
+                if(error){
+                    throw new Error(error)
+                }
+                await photo.remove()
+            });
+        }
+        else{
+            await photo.remove()
+        }
         res.send()
     }
     catch(e){
