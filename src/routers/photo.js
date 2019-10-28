@@ -40,14 +40,14 @@ router.get('/photos', async(req,res) => {
 })
 
 router.get('/photo/:id', async(req,res) => {
-    const photo = await Photo.findById(req.params.id)
-    const comments = await Comment.find({ photo_id: req.params.id})
+    const photo = await Photo.findById(req.params.id).populate('comments')
+    // const comments = await Comment.find({ photo: req.params.id})
     // console.log(photo)
     // const photoInfo = {...photo, comments}
     try{
         //returns image as jpg. 
         // res.set('Content-Type', 'image/jpg')
-        res.status(200).send({photo, comments})
+        res.status(200).send(photo)
     }
     catch(e){
         res.status(404).send()

@@ -1,11 +1,14 @@
 const Photo = require('../models/photo')
 const User = require('../models/user')
 const Genre = require('../models/genre')
+const Comment = require('../models/comment')
 
 const data = async() => {
 
     // User.collection.deleteMany({})
     // Genre.collection.deleteMany({})
+    // Photo.collection.deleteMany({})
+    // Comment.collection.deleteMany({})
     
     const rei = await User.create({
         name: 'Rei',
@@ -92,6 +95,12 @@ const data = async() => {
         {name: "Yamaha Piano", description: "Play me a song", likes: 322, genre: genres[9], image: "https://www.pianosplus.com/wp-content/uploads/yamaha-pianos-types-650x368.jpg", owner: rei},
         {name: "Festival?", description: "Do you even rave?", likes: 45, genre: genres[9], image: "https://s29745.pcdn.co/wp-content/uploads/2018/09/41580112_10156173992978025_4013920836766400512_o.jpg.optimal.jpg", owner: leizl},
         {name: "Spotitube", description: "Pick your Poison", likes: 23, genre: genres[9], image: "https://techcrunch.com/wp-content/uploads/2016/07/spotify-over-youtube.png?w=730&crop=1", owner: rei},
+    ])
+
+    const comments = await Comment.insertMany([
+        {content: "First Comment random", photo: photos[0], user: rei},
+        {content: "Second Comment random", photo: photos[0], user: rei},
+        {content: "Third Comment random", photo: photos[1], user: leizl}
     ])
 }
 

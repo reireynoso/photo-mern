@@ -6,15 +6,15 @@ const commentSchema = mongoose.Schema({
         required: true,
         trim: true
     },
-    photo_id: {
-        type: String,
+    photo: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-        trim: true
+        ref: 'Photo'
     },
-    user_id: {
-        type: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-        trim: true
+        ref: 'User'
     },
 }, {
     timestamps: true

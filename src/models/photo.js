@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 
 const photoSchema = new mongoose.Schema({
     name: {
@@ -30,20 +31,21 @@ const photoSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Genre'
-    }
+    },
 })
 
-// photoSchema.virtual('users', {
-//     ref: 'User',
-//     localField: 'owner',
-//     foreignField: '_id'
-// })
+photoSchema.virtual('comments', {
+    ref: 'Comment',
+    localField: '_id',
+    foreignField: 'photo'
+})
 
 
 //allows populate method to be accessible every time find is used for photos
 photoSchema.pre('find', function(){
     this.populate('owner', 'name age')
     this.populate('genre', 'name')
+    // this.populate('comments', 'content')
 })
 //populate field upon creation and save
 photoSchema.post('save', async function(doc,next){
