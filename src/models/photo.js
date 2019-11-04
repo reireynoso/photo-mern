@@ -31,7 +31,14 @@ const photoSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Genre'
+    }
+}, {
+    toObject: {
+        virtuals: true
     },
+    toJSON: {
+        virtuals: true
+    }
 })
 
 photoSchema.virtual('comments', {
@@ -45,7 +52,7 @@ photoSchema.virtual('comments', {
 photoSchema.pre('find', function(){
     this.populate('owner', 'name age')
     this.populate('genre', 'name')
-    // this.populate('comments', 'content')
+    this.populate('comments', 'content')
 })
 //populate field upon creation and save
 photoSchema.post('save', async function(doc,next){
