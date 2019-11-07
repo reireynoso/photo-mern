@@ -41,10 +41,10 @@ router.get('/photos', async(req,res) => {
 
 router.get('/photo/:id', async(req,res) => {
     const photo = await Photo.findById(req.params.id)
-    await photo.populate('owner', 'name age').execPopulate()
-    await photo.populate('genre', 'name').execPopulate()
-    await photo.populate('comments').execPopulate()
-    console.log(photo.comments)
+    // await photo.populate('owner', 'name age').execPopulate()
+    // await photo.populate('genre', 'name').execPopulate()
+    // await photo.populate('comments').execPopulate()
+    // console.log(photo.comments)
     // const comments = await Comment.find({ photo: req.params.id})
 
     // console.log(photo)

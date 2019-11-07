@@ -25,12 +25,14 @@ const photoSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'User'
+        ref: 'User',
+        autopopulate: true
     },
     genre: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Genre'
+        ref: 'Genre',
+        autopopulate: true
     }
 }, {
     toObject: {
@@ -50,16 +52,18 @@ photoSchema.virtual('comments', {
 
 //allows populate method to be accessible every time find is used for photos
 photoSchema.pre('find', function(){
-    this.populate('owner', 'name age')
-    this.populate('genre', 'name')
+    // this.populate('owner', 'name age')
+    // this.populate('genre', 'name')
     this.populate('comments', 'content')
 })
 //populate field upon creation and save
-photoSchema.post('save', async function(doc,next){
-    await doc.populate('owner').execPopulate()
-    await doc.populate('genre').execPopulate()
-    next()
-})
+// photoSchema.post('save', async function(doc,next){
+//     await doc.populate('owner').execPopulate()
+//     await doc.populate('genre').execPopulate()
+//     next()
+// })
+
+photoSchema.plugin(require('mongoose-autopopulate'));
 
 
 const Photo = mongoose.model('Photo', photoSchema)
