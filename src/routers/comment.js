@@ -4,14 +4,15 @@ const auth = require('../middleware/auth')
 const Comment = require('../models/comment')
 const Photo = require('../models/photo')
 
-// router.get('/comments', async(req,res) => {
-//     const comments = await Comment.find({})
-//     try{
-//         res.status(200).send(comments)
-//     }catch(e){
-//         res.status(404).send()
-//     }
-// })
+router.get('/comments', async(req,res) => {
+    console.log('hey')
+    const comments = await Comment.find({})
+    try{
+        res.status(200).send(comments)
+    }catch(e){
+        res.status(404).send()
+    }
+})
 
 // router.post('/comments', auth ,async(req,res) => {
 //     const newComment = {...req.body, user_id: req.user._id}
@@ -41,6 +42,8 @@ router.delete('/comment/:id', auth, async(req,res) => {
         res.status(500).send(e)
     }
 })
+
+
 
 // router.patch('/comment/:id', auth, async(req,res) => {
 //     const updates = Object.keys(req.body)
