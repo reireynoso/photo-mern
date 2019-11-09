@@ -57,11 +57,11 @@ photoSchema.pre('find', function(){
     this.populate('comments')
 })
 //populate field upon creation and save
-// photoSchema.post('save', async function(doc,next){
-//     await doc.populate('owner').execPopulate()
-//     await doc.populate('genre').execPopulate()
-//     next()
-// })
+photoSchema.post('save', async function(doc,next){
+    await doc.populate('owner').execPopulate()
+    await doc.populate('genre').execPopulate()
+    next()
+})
 
 // photoSchema.plugin(require('mongoose-autopopulate'));
 

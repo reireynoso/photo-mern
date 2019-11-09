@@ -61,7 +61,7 @@ router.get('/photo/:id', async(req,res) => {
 })
 
 router.post('/photo/:id/comments', auth ,async(req,res) => {
-    const newComment = {...req.body, owner: req.user._id, photo: req.params.id}
+    const newComment = {...req.body, user: req.user._id, photo: req.params.id}
     const comment = new Comment(newComment)
     try{
         await comment.save()

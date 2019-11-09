@@ -35,12 +35,17 @@ commentSchema.methods.toJSON = function(){
 
     delete commentObject.createdAt
     delete commentObject.updatedAt
-    delete commentObject.photo
+    // delete commentObject.photo
     // delete userObject.token
 
     return commentObject
 }
 // commentSchema.plugin(require('mongoose-autopopulate'));
+commentSchema.post('save', async function(doc,next){
+    await doc.populate('user').execPopulate()
+    await doc.populate('photo').execPopulate()
+    next()
+})
 
 const Comment = mongoose.model('Comment', commentSchema)
 
