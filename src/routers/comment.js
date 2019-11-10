@@ -25,20 +25,26 @@ router.get('/comments', async(req,res) => {
 //     }
 // })
 
-router.delete('/comment/:id', auth, async(req,res) => {
-    const comment = await Comment.findById(req.params.id)
+router.delete('/comment', auth, async(req,res) => {
+    // console.log(req.body)
+    const comment = await Comment.findById(req.body._id)
+    // console.log(comment.user.toString())
+    // console.log(req.user._id.toString())
     try{
         // const photo = Photo.findByIdAndDelete(req.params.id)
         if(!comment){
-            res.status(404).send()
+            // res.status(404).send({error: "Photo does not exist"})
+            throw new Error("Photo does not exist.")
         }
-        if(comment.user_id !== req.user._id){
+        if(comment.user.toString() !== req.user._id.toString()){
+            // res.status(404).send({error: "You do not own this comment."})
             throw new Error("You do not own this comment.")
         }
         await comment.remove()
-        res.send()
+        res.status(200).send({success: "Comment Deleted"})
     }
     catch(e){
+        // console.log(e)
         res.status(500).send(e)
     }
 })

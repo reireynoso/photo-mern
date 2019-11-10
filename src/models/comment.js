@@ -23,8 +23,8 @@ const commentSchema = new mongoose.Schema({
 })
 
 commentSchema.pre('find', function(){
+    // this.populate('photo', 'likes')
     this.populate('user', 'name age')
-    // this.populate('genre', 'name')
     // this.populate('comments')
 })
 
@@ -43,7 +43,7 @@ commentSchema.methods.toJSON = function(){
 // commentSchema.plugin(require('mongoose-autopopulate'));
 commentSchema.post('save', async function(doc,next){
     await doc.populate('user').execPopulate()
-    await doc.populate('photo').execPopulate()
+    // await doc.populate('photo').execPopulate()
     next()
 })
 

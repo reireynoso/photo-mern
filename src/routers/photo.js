@@ -142,14 +142,20 @@ router.patch('/photo/:id', auth, async(req,res) => {
     }
 })
 
-router.delete('/photo/:id', auth ,async(req,res) => {
-    const photo = await Photo.findById(req.params.id)
+router.delete('/photo', auth ,async(req,res) => {
+    // console.log(req.body)
+    const photo = await Photo.findById(req.body._id)
+    // const commentsOfPhotos = await Comment.find({photo: req.body._id})
+    // console.log(commentsOfPhotos)
+    // console.log(photo.owner === req.user._id)
+    // console.log(photo)
+    // console.log(req.user._id)
     try{
         // const photo = Photo.findByIdAndDelete(req.params.id)
         if(!photo){
             res.status(404).send()
         }
-        if(photo.owner !== req.user._id){
+        if(photo.owner.toString() !== req.user._id.toString()){
             throw new Error("You do not own this photo.")
         }
         // console.log(photo)
@@ -163,12 +169,18 @@ router.delete('/photo/:id', auth ,async(req,res) => {
                     throw new Error(error)
                 }
                 await photo.remove()
+                await Comment.deleteMany({photo: req.body._id})
             });
         }
         else{
+            const commentsOfPhotos = await Comment.find({photo: req.body._id})
+            console.log(commentsOfPhotos)
             await photo.remove()
+            await Comment.deleteMany({photo: req.body._id})
+            const deletedComments = await Comment.find({photo: req.body._id})
+            console.log(deletedComments)
         }
-        res.send()
+        res.send({success: "Photo has been deleted"})
     }
     catch(e){
         res.status(500).send(e)
