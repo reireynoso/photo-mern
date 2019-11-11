@@ -9,14 +9,12 @@ const commentSchema = new mongoose.Schema({
     photo: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Photo',
-        // autopopulate: true
+        ref: 'Photo'
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'User',
-        // autopopulate: true
+        ref: 'User'
     },
 }, {
     timestamps: true

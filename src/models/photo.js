@@ -60,6 +60,7 @@ photoSchema.pre('find', function(){
 photoSchema.post('save', async function(doc,next){
     await doc.populate('owner').execPopulate()
     await doc.populate('genre').execPopulate()
+    await doc.populate('comments').execPopulate()
     next()
 })
 

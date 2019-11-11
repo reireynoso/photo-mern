@@ -29,11 +29,7 @@ const userSchema = mongoose.Schema({
                 throw new Error('Age must be a positive number')
             }
         }
-    },
-    // token: {
-    //     type: String,
-       
-    // }
+    }
 }, {
     timestamps: true
 })

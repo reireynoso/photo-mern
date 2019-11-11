@@ -10,9 +10,12 @@ const auth = require('../middleware/auth')
 const Comment = require('../models/comment')
 
 cloudinary.config({
-    cloud_name: 'dbajnnylp',
-    api_key: '383671612569842',
-    api_secret: 'vtYO04aHVQac4TGFsJ9AeJmgKBY'
+    // cloud_name: 'dbajnnylp',
+    // api_key: '383671612569842',
+    // api_secret: 'vtYO04aHVQac4TGFsJ9AeJmgKBY'
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
 })
 
 // alternative seed data approach
