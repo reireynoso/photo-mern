@@ -26,6 +26,17 @@ cloudinary.config({
 //     res.send(newUser)
 // })
 
+router.get('test', (req,res) => {
+    const hello = "hello"
+    const mongo = process.env.MONGODB_URL
+    try{
+        res.status(200).send({hello, mongo})
+    }
+    catch(e){
+        res.status(404).send(e)
+    }
+})
+
 router.get('/photos', async(req,res) => {
     //populate fields of owner and genre models instead of just having the id string
     // const photos = await Photo.find({}).populate('owner', 'name age').populate('genre','name').exec()
