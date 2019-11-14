@@ -26,7 +26,7 @@ cloudinary.config({
 //     res.send(newUser)
 // })
 
-router.get('test', (req,res) => {
+router.get('/test', (req,res) => {
     const hello = "hello"
     const mongo = process.env.MONGODB_URL
     try{
