@@ -41,7 +41,6 @@ NodeJS
 * Express
 * Mongoose
 * CORS
-* Active Model Serializers
 * BCryptJS
 * JSON Web Tokens
 * Cloudinary (photo uploads)
